@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rosetta Stone Builder</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap">
+  <style>
+    :root {
+      --ground: #FEFDFB;
+      --text-primary: #1F1F1F;
+      --text-secondary: #6B7280;
+      --accent: #D97706;
+      --accent-light: #FEF3C7;
+      --info: #0EA5E9;
+      --success: #10B981;
+      --success-light: #ECFDF5;
+      --neutral: #9CA3AF;
+      --border: #E5E7EB;
+      --bg-secondary: #F9FAFB;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --ground: #0F0F0F;
+        --text-primary: #FAFAFA;
+        --text-secondary: #D1D5DB;
+        --accent: #F59E0B;
+        --accent-light: #78350F;
+        --info: #06B6D4;
+        --success: #34D399;
+        --success-light: #064E3B;
+        --neutral: #6B7280;
+        --border: #374151;
+        --bg-secondary: #1F2937;
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --ground: #0F0F0F;
+      --text-primary: #FAFAFA;
+      --text-secondary: #D1D5DB;
+      --accent: #F59E0B;
+      --accent-light: #78350F;
+      --info: #06B6D4;
+      --success: #34D399;
+      --success-light: #064E3B;
+      --neutral: #6B7280;
+      --border: #374151;
+      --bg-secondary: #1F2937;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--ground);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 280px 1fr 380px;
+      height: 100vh;
+      gap: 0;
+    }
+
+    .sidebar {
+      border-right: 1px solid var(--border);
+      padding: 32px 24px;
+      overflow-y: auto;
+      background: var(--bg-secondary);
+    }
+
+    .sidebar-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      margin: 0 0 24px 0;
+    }
+
+    .steps {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .step {
+      cursor: pointer;
+      padding: 12px 16px;
+      border-radius: 4px;
+      transition: all 0.2s;
+      border-left: 3px solid transparent;
+      font-size: 13px;
+      color: var(--text-secondary);
+      background: transparent;
+    }
+
+    .step:hover {
+      background: var(--ground);
+      color: var(--text-primary);
+    }
+
+    .step.active {
+      background: var(--accent-light);
+      color: var(--accent);
+      border-left-color: var(--accent);
+      font-weight: 600;
+    }
+
+    .step.completed {
+      color: var(--success);
+    }
+
+    .step.completed::before {
+      content: '✓ ';
+      font-weight: 700;
+    }
+
+    .main {
+      padding: 48px 56px;
+      overflow-y: auto;
+    }
+
+    .main-header {
+      margin-bottom: 36px;
+    }
+
+    .main-header h1 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      color: var(--text-primary);
+    }
+
+    .main-header p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .section-content {
+      display: none;
+    }
+
+    .section-content.active {
+      display: block;
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .question-group {
+      margin-bottom: 36px;
+    }
+
+    .question-group label {
+      display: block;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .question-group .question-text {
+      display: block;
+      font-size: 15px;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    .question-group textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--text-primary);
+      background: var(--ground);
+      resize: vertical;
+      line-height: 1.6;
+      transition: border-color 0.2s;
+    }
+
+    .question-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-light);
+    }
+
+    .hint {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    .preview {
+      border-left: 1px solid var(--border);
+      padding: 32px 24px;
+      overflow-y: auto;
+      background: var(--bg-secondary);
+    }
+
+    .preview-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      margin: 0 0 16px 0;
+    }
+
+    .preview-section {
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .preview-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .preview-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--neutral);
+      margin-bottom: 4px;
+    }
+
+    .preview-content {
+      font-size: 13px;
+      color: var(--text-primary);
+      line-height: 1.6;
+      word-break: break-word;
+    }
+
+    .preview-empty {
+      font-size: 12px;
+      color: var(--neutral);
+      font-style: italic;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .btn {
+      padding: 10px 16px;
+      border-radius: 4px;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #B45309;
+    }
+
+    .btn-secondary {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--ground);
+    }
+
+    .completion-message {
+      padding: 16px;
+      border-radius: 4px;
+      background: var(--success-light);
+      border-left: 3px solid var(--success);
+      margin-bottom: 24px;
+    }
+
+    .completion-message p {
+      margin: 0;
+      color: var(--success);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    @media (max-width: 1400px) {
+      .container {
+        grid-template-columns: 260px 1fr;
+      }
+      .preview {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        display: none;
+      }
+      .main {
+        padding: 32px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <h3 class="sidebar-title">Build Your Spine</h3>
+      <ul class="steps" id="steps"></ul>
+    </div>
+
+    <div class="main" id="main">
+      <div class="main-header">
+        <h1 id="section-title">Welcome</h1>
+        <p id="section-subtitle"></p>
+      </div>
+      <div id="section-content"></div>
+    </div>
+
+    <div class="preview" id="preview">
+      <h3 class="preview-title">Your Rosetta Stone</h3>
+      <div id="preview-content"></div>
+    </div>
+  </div>
+
+  <script>
+    const sections = [
+      {
+        id: 'what-do',
+        label: 'What we do and refuse',
+        title: 'What We Do & Refuse to Do',
+        subtitle: 'Define your boundaries and core work',
+        questions: [
+          {
+            key: 'what_we_do',
+            text: 'What does your business sell, to whom, and how is money actually made?',
+            hint: 'Be specific. A contractor would write this here; a contractor would read it and understand what work you turn down.'
+          },
+          {
+            key: 'what_we_refuse',
+            text: 'What work do you explicitly refuse?',
+            hint: 'The work you say no to defines you as much as what you do. Write it down.'
+          }
+        ]
+      },
+      {
+        id: 'customer',
+        label: 'The customer',
+        title: 'The Customer',
+        subtitle: 'Who you serve and what drives them',
+        questions: [
+          {
+            key: 'who_is_buyer',
+            text: 'Who is the buyer? What problem do they say out loud, and what problem are they facing that they can\'t articulate?',
+            hint: 'Include what\'s unsaid. The surface complaint is never the real one.'
+          }
+        ]
+      },
+      {
+        id: 'offers',
+        label: 'Offers and pricing',
+        title: 'Offers & Pricing',
+        subtitle: 'What you sell and what it costs',
+        questions: [
+          {
+            key: 'offers_pricing',
+            text: 'Every live offer: what\'s inside it, the price, who it\'s for, and explicitly what it is not.',
+            hint: 'Be exhaustive. Nobody on the team should have to interrupt you to ask what something costs.'
+          }
+        ]
+      },
+      {
+        id: 'voice',
+        label: 'Voice',
+        title: 'Voice',
+        subtitle: 'How your company sounds',
+        questions: [
+          {
+            key: 'voice_style',
+            text: 'How does this company sound? Words you use, words you never use, sentence rhythm, and what you sound like when you\'re annoyed.',
+            hint: 'Include three passages of good and three of bad, verbatim. This is the completeness test.'
+          }
+        ]
+      },
+      {
+        id: 'framework',
+        label: 'The framework',
+        title: 'The Framework',
+        subtitle: 'Your methodology and approach',
+        questions: [
+          {
+            key: 'framework_methodology',
+            text: 'Your methodology: names, stages, the order they run in, one-line definition of each. This is the asset a buyer will someday pay for.',
+            hint: 'Treat it accordingly. If writing stalls you, talk instead — dictate, then edit. You never delegate the judgment inside it.'
+          }
+        ]
+      },
+      {
+        id: 'brand',
+        label: 'Brand and design',
+        title: 'Brand & Design',
+        subtitle: 'The visual identity',
+        questions: [
+          {
+            key: 'brand_design',
+            text: 'Fonts, colors, logo rules, deck structure, what a finished asset looks like. Where you deliver inside a client\'s brand rather than your own, say so here.',
+            hint: 'Point at where those sit. An output arriving needing no visual correction at all is the completeness test.'
+          }
+        ]
+      },
+      {
+        id: 'ways-of-working',
+        label: 'Ways of working',
+        title: 'Ways of Working',
+        subtitle: 'How decisions flow and escalate',
+        questions: [
+          {
+            key: 'ways_of_working',
+            text: 'Decision rights, escalation, tone in client communication, what always needs a human, what never leaves the building.',
+            hint: 'Think about where an AI gets it wrong and needs a guardrail.'
+          }
+        ]
+      }
+    ];
+
+    let data = {
+      'what-do': { what_we_do: '', what_we_refuse: '' },
+      'customer': { who_is_buyer: '' },
+      'offers': { offers_pricing: '' },
+      'voice': { voice_style: '' },
+      'framework': { framework_methodology: '' },
+      'brand': { brand_design: '' },
+      'ways-of-working': { ways_of_working: '' }
+    };
+
+    let currentStep = 0;
+
+    function initializeSteps() {
+      const stepsContainer = document.getElementById('steps');
+      sections.forEach((section, index) => {
+        const li = document.createElement('li');
+        li.className = 'step';
+        if (index === 0) li.classList.add('active');
+        li.textContent = section.label;
+        li.addEventListener('click', () => switchStep(index));
+        stepsContainer.appendChild(li);
+      });
+    }
+
+    function switchStep(index) {
+      currentStep = index;
+      updateUI();
+      saveToDraft();
+    }
+
+    function updateUI() {
+      const section = sections[currentStep];
+
+      // Update sidebar
+      document.querySelectorAll('.step').forEach((el, i) => {
+        el.classList.remove('active');
+        if (i === currentStep) {
+          el.classList.add('active');
+        }
+      });
+
+      // Update main content
+      document.getElementById('section-title').textContent = section.title;
+      document.getElementById('section-subtitle').textContent = section.subtitle;
+
+      const contentContainer = document.getElementById('section-content');
+      contentContainer.innerHTML = '';
+
+      section.questions.forEach(question => {
+        const group = document.createElement('div');
+        group.className = 'question-group';
+
+        const label = document.createElement('label');
+        label.textContent = `${currentStep + 1}.${section.questions.indexOf(question) + 1}`;
+        group.appendChild(label);
+
+        const questionText = document.createElement('span');
+        questionText.className = 'question-text';
+        questionText.textContent = question.text;
+        group.appendChild(questionText);
+
+        const textarea = document.createElement('textarea');
+        textarea.value = data[section.id][question.key] || '';
+        textarea.addEventListener('input', (e) => {
+          data[section.id][question.key] = e.target.value;
+          updatePreview();
+          saveToDraft();
+        });
+        group.appendChild(textarea);
+
+        if (question.hint) {
+          const hint = document.createElement('div');
+          hint.className = 'hint';
+          hint.textContent = question.hint;
+          group.appendChild(hint);
+        }
+
+        contentContainer.appendChild(group);
+      });
+
+      updatePreview();
+    }
+
+    function updatePreview() {
+      const previewContainer = document.getElementById('preview-content');
+      previewContainer.innerHTML = '';
+
+      sections.forEach(section => {
+        section.questions.forEach(question => {
+          const value = data[section.id][question.key];
+          if (value.trim()) {
+            const previewSection = document.createElement('div');
+            previewSection.className = 'preview-section';
+
+            const label = document.createElement('div');
+            label.className = 'preview-label';
+            label.textContent = section.label;
+            previewSection.appendChild(label);
+
+            const content = document.createElement('div');
+            content.className = 'preview-content';
+            content.textContent = value;
+            previewSection.appendChild(content);
+
+            previewContainer.appendChild(previewSection);
+          }
+        });
+      });
+
+      if (previewContainer.innerHTML === '') {
+        previewContainer.innerHTML = '<div class="preview-empty">Start filling in sections — your Rosetta Stone will appear here.</div>';
+      }
+    }
+
+    function saveToDraft() {
+      const html = generateHTML();
+      if (window.claude) {
+        const artifact = window.claude.use('artifact');
+        if (artifact) {
+          artifact.then(art => art?.publish(html)).catch(() => {});
+        }
+      }
+    }
+
+    function generateHTML() {
+      let content = '<!DOCTYPE html>\n<html>\n<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Your Rosetta Stone</title><style>body{font-family:Inter,-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;margin:0;padding:40px;max-width:800px;line-height:1.8;color:#1f1f1f;background:#fefdfb}h1{font-size:28px;margin-bottom:8px}section{margin-bottom:40px;padding-bottom:40px;border-bottom:1px solid #e5e7eb}section:last-child{border:none}h2{font-size:18px;margin:0 0 16px 0;color:#1f1f1f}@media(prefers-color-scheme:dark){body{background:#0f0f0f;color:#fafafa}h1,h2{color:#fafafa}section{border-bottom-color:#374151}}</style></head><body>\n';
+      content += '<h1>Your Business Rosetta Stone</h1>\n';
+      content += '<p>The shared context your team works from. Every section speaks to what is true about this company, written once, argued about forever.</p>\n';
+
+      sections.forEach(section => {
+        content += `<section>\n<h2>${section.title}</h2>\n`;
+        section.questions.forEach(question => {
+          const value = data[section.id][question.key];
+          if (value.trim()) {
+            content += `<p>${value.replace(/\n/g, '<br>')}</p>\n`;
+          }
+        });
+        content += '</section>\n';
+      });
+
+      content += '</body>\n</html>';
+      return html;
+    }
+
+    async function exportAsMarkdown() {
+      let markdown = '# Your Business Rosetta Stone\n\n';
+      markdown += 'The shared context your team works from. Every section speaks to what is true about this company, written once, argued about forever.\n\n';
+
+      sections.forEach(section => {
+        markdown += `## ${section.title}\n\n`;
+        section.questions.forEach(question => {
+          const value = data[section.id][question.key];
+          if (value.trim()) {
+            markdown += `${value}\n\n`;
+          }
+        });
+      });
+
+      const downloads = await window.claude?.use?.('downloads');
+      if (downloads) {
+        await downloads.save({
+          filename: 'rosetta-stone.md',
+          data: markdown
+        }).catch(() => {
+          // Fallback: copy to clipboard
+          navigator.clipboard.writeText(markdown);
+          alert('Rosetta Stone copied to clipboard (download unavailable)');
+        });
+      }
+    }
+
+    // Initialize
+    initializeSteps();
+    updateUI();
+  </script>
+</body>
+</html>
