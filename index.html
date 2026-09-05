@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rosetta Stone Builder · Limited to Limitless</title>
-  <meta name="description" content="Build your business Rosetta Stone: the one-page spine your team and your AI tools all work from. Answer seven sections, then print or save it as a PDF.">
+  <title>AI Communication Clarity Builder · Limited to Limitless</title>
+  <meta name="description" content="Build your AI Communication Clarity Guide: the one-page spine your team and your AI tools all work from. Answer seven sections, then print or save it as a PDF.">
   <meta name="robots" content="noindex">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -270,10 +270,10 @@
     <header class="topbar">
       <div class="brand">
         <span class="brand-kicker">Limited to Limitless</span>
-        <span class="brand-title">Rosetta Stone Builder</span>
+        <span class="brand-title">AI Communication Clarity Builder</span>
       </div>
       <div class="topbar-actions">
-        <button class="btn btn-secondary" type="button" onclick="copyAsText()" title="Copy the whole Rosetta Stone as plain text">📋 <span class="lbl">Copy text</span></button>
+        <button class="btn btn-secondary" type="button" onclick="copyAsText()" title="Copy the whole Clarity Guide as plain text">📋 <span class="lbl">Copy text</span></button>
         <button class="btn btn-primary" type="button" onclick="printDoc()" title="Print, or save as a PDF">🖨 <span class="lbl">Print / Save PDF</span></button>
       </div>
     </header>
@@ -299,7 +299,7 @@
       </main>
 
       <aside class="preview" id="preview" aria-label="Live preview">
-        <h3 class="preview-title">Your Rosetta Stone</h3>
+        <h3 class="preview-title">Your Clarity Guide</h3>
         <div id="preview-content"></div>
       </aside>
     </div>
@@ -309,7 +309,7 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    const STORAGE_KEY = 'ltl_rosetta_stone_v1';
+    const STORAGE_KEY = 'ltl_clarity_builder_v1';
 
     const sections = [
       {
@@ -390,9 +390,9 @@
 
     // Steps = Start + the 7 sections + Finish
     const steps = [
-      { type: 'start', id: 'start', label: 'Start', title: 'Build your Rosetta Stone', subtitle: 'The one page your whole team, and every AI tool you use, works from.' },
+      { type: 'start', id: 'start', label: 'Start', title: 'Build your AI Communication Clarity Guide', subtitle: 'The one page your whole team, and every AI tool you use, works from.' },
       ...sections.map(s => ({ type: 'section', ...s })),
-      { type: 'finish', id: 'finish', label: 'Finish', title: 'Your Rosetta Stone is ready', subtitle: 'Read it through, then print it or save it as a PDF.' }
+      { type: 'finish', id: 'finish', label: 'Finish', title: 'Your Clarity Guide is ready', subtitle: 'Read it through, then print it or save it as a PDF.' }
     ];
 
     let data = { company: '', answers: {} };
@@ -418,7 +418,7 @@
       try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ company: data.company, answers: data.answers, step: currentStep })); } catch (e) { /* ignore */ }
     }
     function startOver() {
-      if (!confirm('Clear everything and start a fresh Rosetta Stone?')) return;
+      if (!confirm('Clear everything and start a fresh Clarity Guide?')) return;
       data.company = '';
       Object.keys(data.answers).forEach(k => { data.answers[k] = ''; });
       currentStep = 0;
@@ -510,7 +510,7 @@
     function renderStart(content, controls) {
       const callout = el('div', 'callout');
       callout.innerHTML =
-        '<strong>What this is.</strong> A Rosetta Stone is the short document that says what is true about your business: what you do, who it\'s for, how you sound, how you work. ' +
+        '<strong>What this is.</strong> Your Clarity Guide is the short document that says what is true about your business: what you do, who it\'s for, how you sound, how you work. ' +
         'Written once. Read by every person and every AI tool on your team. It stops everyone drifting into their own version of reality.' +
         '<ul><li>Seven sections. Plain answers. Aim for honest, not polished.</li>' +
         '<li>Nothing is uploaded anywhere. Your answers stay in this browser until you print or copy them.</li>' +
@@ -527,7 +527,7 @@
       input.autocomplete = 'organization';
       input.addEventListener('input', e => { data.company = e.target.value; saveDraft(); updatePreview(); });
       group.appendChild(input);
-      group.appendChild(el('div', 'hint', 'This goes on the cover of your printed Rosetta Stone.'));
+      group.appendChild(el('div', 'hint', 'This goes on the cover of your printed Clarity Guide.'));
       content.appendChild(group);
 
       const next = el('button', 'btn btn-primary btn-lg', 'Start building →');
@@ -637,15 +637,15 @@
           box.appendChild(ps); any = true;
         });
       });
-      if (!any) box.appendChild(el('div', 'preview-empty', 'Start filling in sections. Your Rosetta Stone will build here as you go.'));
+      if (!any) box.appendChild(el('div', 'preview-empty', 'Start filling in sections. Your Clarity Guide will build here as you go.'));
     }
 
     // ---------- The document itself (used for the read-through and for print) ----------
     function buildDoc() {
       const doc = el('div', 'doc');
       const cover = el('div', 'doc-cover');
-      cover.appendChild(el('p', 'doc-kicker', 'Business Rosetta Stone'));
-      cover.appendChild(el('h1', null, filled(data.company) ? data.company.trim() : 'Our Rosetta Stone'));
+      cover.appendChild(el('p', 'doc-kicker', 'AI Communication Clarity Guide'));
+      cover.appendChild(el('h1', null, filled(data.company) ? data.company.trim() : 'Our AI Communication Clarity Guide'));
       if (filled(data.company)) cover.appendChild(el('p', 'doc-company', 'The spine we all work from'));
       cover.appendChild(el('p', 'doc-meta', `Prepared ${todayLabel()}`));
       cover.appendChild(el('p', 'doc-intro', 'The shared context this team works from. Every section states what is true about this company. Written once, read by everyone, human or AI, so nobody drifts into their own version of reality.'));
@@ -666,7 +666,7 @@
       });
 
       const footer = el('div', 'doc-footer');
-      footer.appendChild(el('span', null, 'Built with the Rosetta Stone Builder · Limited to Limitless'));
+      footer.appendChild(el('span', null, 'Built with the AI Communication Clarity Builder · Limited to Limitless'));
       footer.appendChild(el('strong', null, 'Be Limitless. Be Bold.'));
       doc.appendChild(footer);
       return doc;
@@ -680,7 +680,7 @@
     function printDoc() {
       refreshPrintDoc();
       const title = document.title;
-      document.title = (filled(data.company) ? data.company.trim() + ' - ' : '') + 'Rosetta Stone';
+      document.title = (filled(data.company) ? data.company.trim() + ' - ' : '') + 'Clarity Guide';
       window.print();
       setTimeout(() => { document.title = title; }, 1000);
     }
@@ -688,7 +688,7 @@
 
     // ---------- Copy as plain text (for pasting into AI projects) ----------
     function buildMarkdown() {
-      let md = `# ${filled(data.company) ? data.company.trim() + ' — ' : ''}Business Rosetta Stone\n\n`;
+      let md = `# ${filled(data.company) ? data.company.trim() + ' — ' : ''}AI Communication Clarity Guide\n\n`;
       md += `Prepared ${todayLabel()}\n\n`;
       md += 'The shared context this team works from. Every section states what is true about this company. Written once, read by everyone, human or AI, so nobody drifts into their own version of reality.\n\n';
       sections.forEach((section, i) => {
@@ -698,7 +698,7 @@
           md += `**${q.text}**\n\n${filled(v) ? v.trim() : '_Not written yet._'}\n\n`;
         });
       });
-      md += '---\nBuilt with the Rosetta Stone Builder · Limited to Limitless · Be Limitless. Be Bold.\n';
+      md += '---\nBuilt with the AI Communication Clarity Builder · Limited to Limitless · Be Limitless. Be Bold.\n';
       return md;
     }
     async function copyAsText() {

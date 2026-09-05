@@ -1,4 +1,4 @@
-# Rosetta Stone Builder
+# AI Communication Clarity Builder
 
 An interactive page for service-based business leaders to build their organizational "spine": the shared context that stops a team (and its AI tools) drifting into different versions of reality.
 
@@ -19,7 +19,7 @@ Guides the client through seven sections, one at a time:
 Then a Finish step with:
 
 - **Print / Save as PDF** — a clean, print-formatted document (cover with company name and date, one heading per section, "Be Limitless. Be Bold." footer). The browser's print dialog handles "Save as PDF".
-- **Copy as text** — the whole Rosetta Stone as markdown, ready to paste into a ChatGPT / Claude / Gemini project or a shared doc.
+- **Copy as text** — the whole Clarity Guide as markdown, ready to paste into a ChatGPT / Claude / Gemini project or a shared doc.
 - A read-through of the full document, and a checklist of which sections are still blank.
 
 ## Privacy
