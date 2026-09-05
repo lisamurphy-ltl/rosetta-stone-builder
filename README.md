@@ -1,52 +1,36 @@
 # Rosetta Stone Builder
 
-An interactive wizard for service-based business leaders to build their organizational "spine"—the shared context that prevents teams from drifting into different versions of reality.
+An interactive page for service-based business leaders to build their organizational "spine": the shared context that stops a team (and its AI tools) drifting into different versions of reality.
 
-## What It Does
+Hosted on Vercel. Single static `index.html`, no backend, nothing stored on a server.
 
-The Rosetta Stone Builder guides clients through defining their business context in seven core dimensions:
+## What it does
 
-1. **What we do and refuse to do** — Boundaries and core work
-2. **The customer** — Who you serve and what drives them
-3. **Offers and pricing** — What you sell and what it costs
-4. **Voice** — How your company sounds
-5. **The framework** — Your methodology and approach
-6. **Brand and design** — The visual identity
-7. **Ways of working** — How decisions flow and escalate
+Guides the client through seven sections, one at a time:
 
-## How It Works
+1. **What we do and refuse to do** — boundaries and core work
+2. **The customer** — who you serve and what drives them
+3. **Offers and pricing** — what you sell and what it costs
+4. **Voice** — how the company sounds
+5. **The framework** — methodology and approach
+6. **Brand and design** — the visual identity
+7. **Ways of working** — how decisions flow and escalate
 
-- **Step-by-step wizard**: Guided questions for each section, one at a time
-- **Live preview**: See the Rosetta Stone take shape in real time as you fill in sections
-- **Auto-saving**: Changes persist—clients can return to refine
-- **Export**: Download the finished spine as a markdown file they own
+Then a Finish step with:
 
-## For Your Clients
+- **Print / Save as PDF** — a clean, print-formatted document (cover with company name and date, one heading per section, "Be Limitless. Be Bold." footer). The browser's print dialog handles "Save as PDF".
+- **Copy as text** — the whole Rosetta Stone as markdown, ready to paste into a ChatGPT / Claude / Gemini project or a shared doc.
+- A read-through of the full document, and a checklist of which sections are still blank.
 
-This tool solves a specific problem: teams without shared context default to different versions of reality when working with AI. A Rosetta Stone written once and loaded by everyone—human or AI—prevents that drift.
+## Privacy
 
-The output becomes:
-- The basis for all internal AI prompts
-- A reference for new team members
-- A governance document they review quarterly
-- The spine for their operating manual
+Nothing is uploaded or saved on a server. Answers are kept in the visitor's own browser (localStorage) so a refresh doesn't lose their work; "Start over" clears them. There is no login, no gate, and no email capture.
 
-## Using the Tool
+## Deploying
 
-1. Open `index.html` in a browser
-2. Work through each section in order
-3. Copy your completed Rosetta Stone to a shared location
-4. Load it into every tool your team uses
-
-## Architecture
-
-- Single-file HTML with embedded CSS and JavaScript
-- Three-panel layout: navigation, input, preview
-- Artifact-capable: saves state as page is edited
-- Download capability: export as markdown
-- Dark mode aware
+Push to `main` and Vercel redeploys automatically. No build step.
 
 ---
 
-Built from *The Office Stack Build* by Peter Swain Inc / Lizzie Swain  
+Built from *The Office Stack Build* by Peter Swain Inc / Lizzie Swain
 Adapted for Limited to Limitless clients

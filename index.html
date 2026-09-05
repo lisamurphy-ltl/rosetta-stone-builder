@@ -3,640 +3,723 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rosetta Stone Builder</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap">
+  <title>Rosetta Stone Builder · Limited to Limitless</title>
+  <meta name="description" content="Build your business Rosetta Stone: the one-page spine your team and your AI tools all work from. Answer seven sections, then print or save it as a PDF.">
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
   <style>
     :root {
-      --ground: #FEFDFB;
-      --text-primary: #1F1F1F;
-      --text-secondary: #6B7280;
-      --accent: #D97706;
-      --accent-light: #FEF3C7;
-      --info: #0EA5E9;
-      --success: #10B981;
-      --success-light: #ECFDF5;
-      --neutral: #9CA3AF;
-      --border: #E5E7EB;
-      --bg-secondary: #F9FAFB;
+      --ground: #FFFFFF;
+      --panel: #F4F7FA;
+      --navy: #0A1020;
+      --text: #0A1020;
+      --muted: #4B5563;
+      --faint: #9AA3AF;
+      --border: #DCE3EA;
+      --ember: #FF8A3D;
+      --ember-dark: #E8742A;
+      --ember-soft: #FFF1E7;
+      --steel: #7DC0F0;
+      --steel-soft: #E6F2FB;
+      --teal: #1F8FA6;
+      --teal-soft: #E3F5F8;
+      --display: 'Barlow Condensed', 'Arial Narrow', Impact, sans-serif;
+      --body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
-
     @media (prefers-color-scheme: dark) {
       :root:not([data-theme="light"]) {
-        --ground: #0F0F0F;
-        --text-primary: #FAFAFA;
-        --text-secondary: #D1D5DB;
-        --accent: #F59E0B;
-        --accent-light: #78350F;
-        --info: #06B6D4;
-        --success: #34D399;
-        --success-light: #064E3B;
-        --neutral: #6B7280;
-        --border: #374151;
-        --bg-secondary: #1F2937;
+        --ground: #0A1020;
+        --panel: #0F172A;
+        --text: #F1F5F9;
+        --muted: #B8C2CF;
+        --faint: #6B7684;
+        --border: #24304A;
+        --ember-soft: #3A2314;
+        --steel-soft: #142236;
+        --teal: #4CC3DA;
+        --teal-soft: #0F2A33;
       }
     }
-
     :root[data-theme="dark"] {
-      --ground: #0F0F0F;
-      --text-primary: #FAFAFA;
-      --text-secondary: #D1D5DB;
-      --accent: #F59E0B;
-      --accent-light: #78350F;
-      --info: #06B6D4;
-      --success: #34D399;
-      --success-light: #064E3B;
-      --neutral: #6B7280;
-      --border: #374151;
-      --bg-secondary: #1F2937;
+      --ground: #0A1020;
+      --panel: #0F172A;
+      --text: #F1F5F9;
+      --muted: #B8C2CF;
+      --faint: #6B7684;
+      --border: #24304A;
+      --ember-soft: #3A2314;
+      --steel-soft: #142236;
+      --teal: #4CC3DA;
+      --teal-soft: #0F2A33;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
     body {
       margin: 0;
-      padding: 0;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: var(--body);
       background: var(--ground);
-      color: var(--text-primary);
+      color: var(--text);
       line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
     }
+    button { font-family: var(--body); }
 
-    .container {
+    /* ---------- App shell ---------- */
+    .app { display: flex; flex-direction: column; height: 100vh; }
+
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 14px 28px;
+      background: var(--navy);
+      color: #fff;
+      border-bottom: 3px solid var(--ember);
+      flex: 0 0 auto;
+    }
+    .brand { display: flex; flex-direction: column; line-height: 1.15; }
+    .brand-kicker { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--steel); font-weight: 600; }
+    .brand-title { font-family: var(--display); font-size: 26px; font-weight: 800; letter-spacing: 0.01em; }
+    .topbar-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+
+    .layout {
       display: grid;
-      grid-template-columns: 280px 1fr 380px;
-      height: 100vh;
-      gap: 0;
+      grid-template-columns: 260px minmax(0, 1fr) 380px;
+      flex: 1;
+      min-height: 0;
     }
 
+    /* ---------- Sidebar ---------- */
     .sidebar {
       border-right: 1px solid var(--border);
-      padding: 32px 24px;
+      background: var(--panel);
+      padding: 28px 20px;
       overflow-y: auto;
-      background: var(--bg-secondary);
     }
-
     .sidebar-title {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 14px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-secondary);
-      margin: 0 0 24px 0;
+      font-family: var(--display);
+      font-size: 15px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--muted); margin: 0 0 16px 0;
     }
-
-    .steps {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
+    .steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
     .step {
-      cursor: pointer;
-      padding: 12px 16px;
-      border-radius: 4px;
-      transition: all 0.2s;
+      display: flex; align-items: center; gap: 10px;
+      cursor: pointer; padding: 10px 12px; border-radius: 6px;
       border-left: 3px solid transparent;
-      font-size: 13px;
-      color: var(--text-secondary);
-      background: transparent;
+      font-size: 13.5px; color: var(--muted);
+      transition: background 0.15s, color 0.15s;
+      user-select: none;
     }
-
-    .step:hover {
-      background: var(--ground);
-      color: var(--text-primary);
+    .step:hover { background: var(--ground); color: var(--text); }
+    .step .num {
+      flex: 0 0 22px; height: 22px; border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+      background: var(--border); color: var(--muted);
     }
+    .step.active { background: var(--ember-soft); color: var(--text); border-left-color: var(--ember); font-weight: 600; }
+    .step.active .num { background: var(--ember); color: #fff; }
+    .step.done .num { background: var(--teal); color: #fff; }
+    .step.done .num::before { content: '✓'; }
+    .step.done .num span { display: none; }
 
-    .step.active {
-      background: var(--accent-light);
-      color: var(--accent);
-      border-left-color: var(--accent);
-      font-weight: 600;
+    .progress { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 12.5px; color: var(--muted); }
+    .progress-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin-top: 8px; }
+    .progress-bar > div { height: 100%; background: var(--teal); width: 0; transition: width 0.3s; }
+
+    /* ---------- Main ---------- */
+    .main { padding: 44px 56px 64px; overflow-y: auto; min-width: 0; }
+    .main-inner { max-width: 720px; }
+    .eyebrow { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ember); font-weight: 700; margin: 0 0 6px; }
+    .main h1 { font-family: var(--display); font-size: 38px; font-weight: 800; line-height: 1.05; margin: 0 0 8px; }
+    .main .lede { margin: 0 0 32px; color: var(--muted); font-size: 15.5px; }
+
+    .question-group { margin-bottom: 34px; }
+    .question-group .q-label { font-family: var(--display); font-size: 14px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+    .question-group .q-text { display: block; font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 10px; line-height: 1.45; }
+    textarea, input[type="text"] {
+      width: 100%; padding: 12px 14px;
+      border: 1px solid var(--border); border-radius: 6px;
+      font-family: var(--body); font-size: 15px; color: var(--text); background: var(--ground);
+      line-height: 1.6; transition: border-color 0.15s, box-shadow 0.15s;
     }
+    textarea { min-height: 150px; resize: vertical; }
+    textarea:focus, input[type="text"]:focus { outline: none; border-color: var(--steel); box-shadow: 0 0 0 3px var(--steel-soft); }
+    .hint { font-size: 13px; color: var(--muted); margin-top: 8px; }
+    .hint strong { color: var(--text); }
 
-    .step.completed {
-      color: var(--success);
+    .callout {
+      background: var(--panel); border: 1px solid var(--border); border-left: 4px solid var(--steel);
+      border-radius: 6px; padding: 16px 18px; margin: 0 0 28px; font-size: 14.5px;
     }
+    .callout ul { margin: 8px 0 0; padding-left: 20px; }
+    .callout li { margin: 4px 0; }
 
-    .step.completed::before {
-      content: '✓ ';
-      font-weight: 700;
-    }
-
-    .main {
-      padding: 48px 56px;
-      overflow-y: auto;
-    }
-
-    .main-header {
-      margin-bottom: 36px;
-    }
-
-    .main-header h1 {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 28px;
-      font-weight: 700;
-      margin: 0 0 8px 0;
-      color: var(--text-primary);
-    }
-
-    .main-header p {
-      margin: 0;
-      color: var(--text-secondary);
-      font-size: 14px;
-    }
-
-    .section-content {
-      display: none;
-    }
-
-    .section-content.active {
-      display: block;
-      animation: fadeIn 0.3s;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .question-group {
-      margin-bottom: 36px;
-    }
-
-    .question-group label {
-      display: block;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-secondary);
-      margin-bottom: 8px;
-    }
-
-    .question-group .question-text {
-      display: block;
-      font-size: 15px;
-      color: var(--text-primary);
-      margin-bottom: 12px;
-      font-weight: 500;
-    }
-
-    .question-group textarea {
-      width: 100%;
-      min-height: 100px;
-      padding: 12px 16px;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      font-family: 'Inter', sans-serif;
-      font-size: 14px;
-      color: var(--text-primary);
-      background: var(--ground);
-      resize: vertical;
-      line-height: 1.6;
-      transition: border-color 0.2s;
-    }
-
-    .question-group textarea:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-light);
-    }
-
-    .hint {
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-top: 8px;
-      font-style: italic;
-    }
-
-    .preview {
-      border-left: 1px solid var(--border);
-      padding: 32px 24px;
-      overflow-y: auto;
-      background: var(--bg-secondary);
-    }
-
-    .preview-title {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 14px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-secondary);
-      margin: 0 0 16px 0;
-    }
-
-    .preview-section {
-      margin-bottom: 24px;
-      padding-bottom: 24px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .preview-section:last-child {
-      border-bottom: none;
-      margin-bottom: 0;
-      padding-bottom: 0;
-    }
-
-    .preview-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--neutral);
-      margin-bottom: 4px;
-    }
-
-    .preview-content {
-      font-size: 13px;
-      color: var(--text-primary);
-      line-height: 1.6;
-      word-break: break-word;
-    }
-
-    .preview-empty {
-      font-size: 12px;
-      color: var(--neutral);
-      font-style: italic;
-    }
-
-    .controls {
-      display: flex;
-      gap: 12px;
-      margin-top: 32px;
-      padding-top: 24px;
-      border-top: 1px solid var(--border);
-    }
-
+    .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 36px; padding-top: 22px; border-top: 1px solid var(--border); }
+    .controls .spacer { flex: 1; }
     .btn {
-      padding: 10px 16px;
-      border-radius: 4px;
-      border: none;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-family: 'Inter', sans-serif;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 18px; border-radius: 6px; border: 1px solid transparent;
+      font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap;
+      transition: background 0.15s, border-color 0.15s, transform 0.05s;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { background: var(--ember); color: #fff; }
+    .btn-primary:hover { background: var(--ember-dark); }
+    .btn-secondary { background: var(--ground); color: var(--text); border-color: var(--border); }
+    .btn-secondary:hover { border-color: var(--steel); }
+    .btn-ghost { background: transparent; color: var(--muted); border-color: transparent; padding-left: 8px; padding-right: 8px; }
+    .btn-ghost:hover { color: var(--text); }
+    .topbar .btn-secondary { background: transparent; color: #fff; border-color: rgba(255,255,255,0.35); }
+    .topbar .btn-secondary:hover { border-color: #fff; }
+    .btn-lg { padding: 14px 24px; font-size: 16px; }
+
+    .status-list { list-style: none; padding: 0; margin: 0 0 28px; display: grid; gap: 8px; }
+    .status-list li { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; cursor: pointer; }
+    .status-list li:hover { border-color: var(--steel); }
+    .status-list .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--faint); flex: 0 0 10px; }
+    .status-list li.done .dot { background: var(--teal); }
+    .status-list .state { margin-left: auto; font-size: 12px; color: var(--muted); }
+
+    .finish-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 0 0 12px; }
+    .print-tip { font-size: 13px; color: var(--muted); margin: 0 0 32px; }
+    .toast {
+      position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(20px);
+      background: var(--navy); color: #fff; padding: 10px 18px; border-radius: 6px; font-size: 14px;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; z-index: 50;
+      border-left: 4px solid var(--teal);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ---------- Preview (right) ---------- */
+    .preview { border-left: 1px solid var(--border); background: var(--panel); padding: 28px 24px; overflow-y: auto; }
+    .preview-title { font-family: var(--display); font-size: 15px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 16px; }
+    .preview-section { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+    .preview-section:last-child { border-bottom: none; }
+    .preview-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ember); margin-bottom: 4px; }
+    .preview-content { font-size: 13px; color: var(--text); line-height: 1.55; white-space: pre-wrap; word-break: break-word; }
+    .preview-empty { font-size: 13px; color: var(--faint); font-style: italic; }
+
+    /* ---------- The document (read-through on the Finish step + the print/PDF output) ---------- */
+    .doc { max-width: 720px; }
+    .doc-cover { padding: 8px 0 28px; border-bottom: 3px solid var(--ember); margin-bottom: 28px; }
+    .doc-cover .doc-kicker { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 0 8px; }
+    .doc-cover h1 { font-family: var(--display); font-size: 44px; font-weight: 800; line-height: 1; margin: 0 0 6px; color: var(--text); }
+    .doc-cover .doc-company { font-family: var(--display); font-size: 26px; font-weight: 700; color: var(--ember); margin: 0 0 10px; }
+    .doc-cover .doc-meta { font-size: 13px; color: var(--muted); margin: 0 0 14px; }
+    .doc-cover .doc-intro { font-size: 14.5px; color: var(--text); margin: 0; }
+    .doc-section { margin: 0 0 30px; padding-bottom: 22px; border-bottom: 1px solid var(--border); }
+    .doc-section:last-of-type { border-bottom: none; }
+    .doc-section h2 { font-family: var(--display); font-size: 26px; font-weight: 700; margin: 0 0 2px; color: var(--text); }
+    .doc-section .doc-sub { font-size: 13px; color: var(--muted); margin: 0 0 14px; }
+    .doc-q { margin: 0 0 14px; }
+    .doc-q .doc-qtext { font-size: 12.5px; font-weight: 600; color: var(--muted); margin: 0 0 4px; }
+    .doc-q .doc-answer { font-size: 14.5px; line-height: 1.65; margin: 0; white-space: pre-wrap; word-break: break-word; }
+    .doc-q .doc-answer.empty { color: var(--faint); font-style: italic; }
+    .doc-footer { margin-top: 36px; padding-top: 14px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .doc-footer strong { color: var(--ember); font-family: var(--display); font-size: 14px; letter-spacing: 0.04em; }
+
+    #print-doc { display: none; }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 1200px) {
+      .layout { grid-template-columns: 240px minmax(0, 1fr); }
+      .preview { display: none; }
+    }
+    @media (max-width: 860px) {
+      .app { height: auto; min-height: 100vh; }
+      .layout { display: block; }
+      .topbar { padding: 12px 16px; position: sticky; top: 0; z-index: 10; }
+      .brand-title { font-size: 22px; }
+      .topbar-actions .btn span.lbl { display: none; }
+      .sidebar { border-right: none; border-bottom: 1px solid var(--border); padding: 10px 12px 6px; overflow-x: auto; }
+      .sidebar-title, .progress { display: none; }
+      .steps { flex-direction: row; gap: 6px; }
+      .step { flex: 0 0 auto; padding: 8px 10px; border-left: none; border-bottom: 3px solid transparent; border-radius: 6px 6px 0 0; font-size: 12.5px; }
+      .step.active { border-bottom-color: var(--ember); }
+      .step .lbl { display: none; }
+      .step.active .lbl { display: inline; }
+      .main { padding: 28px 18px 48px; overflow: visible; }
+      .main h1 { font-size: 32px; }
+      .controls .btn { flex: 1 1 auto; justify-content: center; }
+      .controls .btn-ghost { flex: 1 1 100%; }
     }
 
-    .btn-primary {
-      background: var(--accent);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: #B45309;
-    }
-
-    .btn-secondary {
-      background: var(--bg-secondary);
-      color: var(--text-primary);
-      border: 1px solid var(--border);
-    }
-
-    .btn-secondary:hover {
-      background: var(--ground);
-    }
-
-    .completion-message {
-      padding: 16px;
-      border-radius: 4px;
-      background: var(--success-light);
-      border-left: 3px solid var(--success);
-      margin-bottom: 24px;
-    }
-
-    .completion-message p {
-      margin: 0;
-      color: var(--success);
-      font-size: 13px;
-      font-weight: 500;
-    }
-
-    @media (max-width: 1400px) {
-      .container {
-        grid-template-columns: 260px 1fr;
+    /* ---------- Print: only the document, on white paper ---------- */
+    @page { size: Letter; margin: 0.75in 0.8in; }
+    @media print {
+      :root, :root[data-theme="dark"] {
+        --ground: #fff; --panel: #fff; --text: #0A1020; --muted: #4B5563; --faint: #9AA3AF; --border: #D1D5DB;
+        --ember: #E8742A; --teal: #1F8FA6;
       }
-      .preview {
-        display: none;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .container {
-        grid-template-columns: 1fr;
-      }
-      .sidebar {
-        display: none;
-      }
-      .main {
-        padding: 32px 24px;
-      }
+      html, body { height: auto; background: #fff !important; color: #0A1020 !important; }
+      .app, .toast { display: none !important; }
+      #print-doc { display: block !important; max-width: none; }
+      .doc-cover h1 { font-size: 40px; }
+      .doc-section { break-inside: auto; page-break-inside: auto; }
+      .doc-section h2, .doc-q .doc-qtext { break-after: avoid; page-break-after: avoid; }
+      .doc-q { break-inside: avoid; page-break-inside: avoid; }
+      .doc-footer { break-inside: avoid; }
+      a { color: inherit; text-decoration: none; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="sidebar">
-      <h3 class="sidebar-title">Build Your Spine</h3>
-      <ul class="steps" id="steps"></ul>
-    </div>
-
-    <div class="main" id="main">
-      <div class="main-header">
-        <h1 id="section-title">Welcome</h1>
-        <p id="section-subtitle"></p>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-kicker">Limited to Limitless</span>
+        <span class="brand-title">Rosetta Stone Builder</span>
       </div>
-      <div id="section-content"></div>
-    </div>
+      <div class="topbar-actions">
+        <button class="btn btn-secondary" type="button" onclick="copyAsText()" title="Copy the whole Rosetta Stone as plain text">📋 <span class="lbl">Copy text</span></button>
+        <button class="btn btn-primary" type="button" onclick="printDoc()" title="Print, or save as a PDF">🖨 <span class="lbl">Print / Save PDF</span></button>
+      </div>
+    </header>
 
-    <div class="preview" id="preview">
-      <h3 class="preview-title">Your Rosetta Stone</h3>
-      <div id="preview-content"></div>
+    <div class="layout">
+      <nav class="sidebar" aria-label="Sections">
+        <h3 class="sidebar-title">Build your spine</h3>
+        <ul class="steps" id="steps"></ul>
+        <div class="progress">
+          <div id="progress-text">0 of 8 questions answered</div>
+          <div class="progress-bar"><div id="progress-fill"></div></div>
+        </div>
+      </nav>
+
+      <main class="main" id="main">
+        <div class="main-inner">
+          <p class="eyebrow" id="eyebrow"></p>
+          <h1 id="section-title"></h1>
+          <p class="lede" id="section-subtitle"></p>
+          <div id="section-content"></div>
+          <div class="controls" id="controls"></div>
+        </div>
+      </main>
+
+      <aside class="preview" id="preview" aria-label="Live preview">
+        <h3 class="preview-title">Your Rosetta Stone</h3>
+        <div id="preview-content"></div>
+      </aside>
     </div>
   </div>
 
+  <div id="print-doc" class="doc"></div>
+  <div class="toast" id="toast"></div>
+
   <script>
+    const STORAGE_KEY = 'ltl_rosetta_stone_v1';
+
     const sections = [
       {
         id: 'what-do',
         label: 'What we do and refuse',
         title: 'What We Do & Refuse to Do',
-        subtitle: 'Define your boundaries and core work',
+        subtitle: 'Your boundaries and your core work.',
         questions: [
-          {
-            key: 'what_we_do',
-            text: 'What does your business sell, to whom, and how is money actually made?',
-            hint: 'Be specific. A contractor would write this here; a contractor would read it and understand what work you turn down.'
-          },
-          {
-            key: 'what_we_refuse',
-            text: 'What work do you explicitly refuse?',
-            hint: 'The work you say no to defines you as much as what you do. Write it down.'
-          }
+          { key: 'what_we_do', text: 'What does your business sell, to whom, and how is money actually made?',
+            hint: 'Be specific. A new contractor should read this and know exactly what work you take on.' },
+          { key: 'what_we_refuse', text: 'What work do you explicitly refuse?',
+            hint: 'The work you say no to defines you as much as what you do. Write it down.' }
         ]
       },
       {
         id: 'customer',
         label: 'The customer',
         title: 'The Customer',
-        subtitle: 'Who you serve and what drives them',
+        subtitle: 'Who you serve and what drives them.',
         questions: [
-          {
-            key: 'who_is_buyer',
-            text: 'Who is the buyer? What problem do they say out loud, and what problem are they facing that they can\'t articulate?',
-            hint: 'Include what\'s unsaid. The surface complaint is never the real one.'
-          }
+          { key: 'who_is_buyer', text: 'Who is the buyer? What problem do they say out loud, and what problem are they facing that they can\'t put into words?',
+            hint: 'Include what\'s unsaid. The surface complaint is never the real one.' }
         ]
       },
       {
         id: 'offers',
         label: 'Offers and pricing',
         title: 'Offers & Pricing',
-        subtitle: 'What you sell and what it costs',
+        subtitle: 'What you sell and what it costs.',
         questions: [
-          {
-            key: 'offers_pricing',
-            text: 'Every live offer: what\'s inside it, the price, who it\'s for, and explicitly what it is not.',
-            hint: 'Be exhaustive. Nobody on the team should have to interrupt you to ask what something costs.'
-          }
+          { key: 'offers_pricing', text: 'Every live offer: what\'s inside it, the price, who it\'s for, and explicitly what it is not.',
+            hint: 'Be exhaustive. Nobody on the team should have to interrupt you to ask what something costs.' }
         ]
       },
       {
         id: 'voice',
         label: 'Voice',
         title: 'Voice',
-        subtitle: 'How your company sounds',
+        subtitle: 'How your company sounds.',
         questions: [
-          {
-            key: 'voice_style',
-            text: 'How does this company sound? Words you use, words you never use, sentence rhythm, and what you sound like when you\'re annoyed.',
-            hint: 'Include three passages of good and three of bad, verbatim. This is the completeness test.'
-          }
+          { key: 'voice_style', text: 'How does this company sound? Words you use, words you never use, sentence rhythm, and what you sound like when you\'re annoyed.',
+            hint: 'Paste in three short passages that sound right and three that sound wrong. <strong>That\'s the completeness test.</strong>' }
         ]
       },
       {
         id: 'framework',
         label: 'The framework',
         title: 'The Framework',
-        subtitle: 'Your methodology and approach',
+        subtitle: 'Your methodology and approach.',
         questions: [
-          {
-            key: 'framework_methodology',
-            text: 'Your methodology: names, stages, the order they run in, one-line definition of each. This is the asset a buyer will someday pay for.',
-            hint: 'Treat it accordingly. If writing stalls you, talk instead — dictate, then edit. You never delegate the judgment inside it.'
-          }
+          { key: 'framework_methodology', text: 'Your methodology: the name, the stages, the order they run in, and a one-line definition of each.',
+            hint: 'This is the asset a buyer will someday pay for. Treat it accordingly. If writing stalls you, talk it out and dictate, then edit. Never delegate the judgment inside it.' }
         ]
       },
       {
         id: 'brand',
         label: 'Brand and design',
         title: 'Brand & Design',
-        subtitle: 'The visual identity',
+        subtitle: 'The visual identity.',
         questions: [
-          {
-            key: 'brand_design',
-            text: 'Fonts, colors, logo rules, deck structure, what a finished asset looks like. Where you deliver inside a client\'s brand rather than your own, say so here.',
-            hint: 'Point at where those sit. An output arriving needing no visual correction at all is the completeness test.'
-          }
+          { key: 'brand_design', text: 'Fonts, colors, logo rules, deck structure, and what a finished asset looks like. Where you deliver inside a client\'s brand rather than your own, say so here.',
+            hint: 'Point at where the files sit. <strong>The test:</strong> an output arrives needing no visual correction at all.' }
         ]
       },
       {
         id: 'ways-of-working',
         label: 'Ways of working',
         title: 'Ways of Working',
-        subtitle: 'How decisions flow and escalate',
+        subtitle: 'How decisions flow and escalate.',
         questions: [
-          {
-            key: 'ways_of_working',
-            text: 'Decision rights, escalation, tone in client communication, what always needs a human, what never leaves the building.',
-            hint: 'Think about where an AI gets it wrong and needs a guardrail.'
-          }
+          { key: 'ways_of_working', text: 'Decision rights, escalation, tone in client communication, what always needs a human, and what never leaves the building.',
+            hint: 'Think about where an AI would get it wrong and needs a guardrail.' }
         ]
       }
     ];
 
-    let data = {
-      'what-do': { what_we_do: '', what_we_refuse: '' },
-      'customer': { who_is_buyer: '' },
-      'offers': { offers_pricing: '' },
-      'voice': { voice_style: '' },
-      'framework': { framework_methodology: '' },
-      'brand': { brand_design: '' },
-      'ways-of-working': { ways_of_working: '' }
-    };
+    const TOTAL_QUESTIONS = sections.reduce((n, s) => n + s.questions.length, 0);
 
+    // Steps = Start + the 7 sections + Finish
+    const steps = [
+      { type: 'start', id: 'start', label: 'Start', title: 'Build your Rosetta Stone', subtitle: 'The one page your whole team, and every AI tool you use, works from.' },
+      ...sections.map(s => ({ type: 'section', ...s })),
+      { type: 'finish', id: 'finish', label: 'Finish', title: 'Your Rosetta Stone is ready', subtitle: 'Read it through, then print it or save it as a PDF.' }
+    ];
+
+    let data = { company: '', answers: {} };
+    sections.forEach(s => s.questions.forEach(q => { data.answers[q.key] = ''; }));
     let currentStep = 0;
 
+    // ---------- Local draft (this browser only; nothing is sent anywhere) ----------
+    function loadDraft() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const saved = JSON.parse(raw);
+        if (saved && typeof saved === 'object') {
+          data.company = typeof saved.company === 'string' ? saved.company : '';
+          Object.keys(data.answers).forEach(k => {
+            if (saved.answers && typeof saved.answers[k] === 'string') data.answers[k] = saved.answers[k];
+          });
+          if (Number.isInteger(saved.step) && saved.step >= 0 && saved.step < steps.length) currentStep = saved.step;
+        }
+      } catch (e) { /* ignore */ }
+    }
+    function saveDraft() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ company: data.company, answers: data.answers, step: currentStep })); } catch (e) { /* ignore */ }
+    }
+    function startOver() {
+      if (!confirm('Clear everything and start a fresh Rosetta Stone?')) return;
+      data.company = '';
+      Object.keys(data.answers).forEach(k => { data.answers[k] = ''; });
+      currentStep = 0;
+      try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignore */ }
+      render();
+      showToast('Cleared. Starting fresh.');
+    }
+
+    // ---------- Helpers ----------
+    const filled = v => typeof v === 'string' && v.trim().length > 0;
+    function sectionDone(section) { return section.questions.every(q => filled(data.answers[q.key])); }
+    function answeredCount() { return Object.values(data.answers).filter(filled).length; }
+    function el(tag, cls, text) {
+      const n = document.createElement(tag);
+      if (cls) n.className = cls;
+      if (text !== undefined) n.textContent = text;
+      return n;
+    }
+    function todayLabel() {
+      return new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+    let toastTimer;
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+    }
+
+    // ---------- Sidebar ----------
     function initializeSteps() {
-      const stepsContainer = document.getElementById('steps');
-      sections.forEach((section, index) => {
-        const li = document.createElement('li');
-        li.className = 'step';
-        if (index === 0) li.classList.add('active');
-        li.textContent = section.label;
-        li.addEventListener('click', () => switchStep(index));
-        stepsContainer.appendChild(li);
+      const ul = document.getElementById('steps');
+      ul.innerHTML = '';
+      steps.forEach((step, index) => {
+        const li = el('li', 'step');
+        li.dataset.index = index;
+        const num = el('span', 'num');
+        const numText = el('span', null, step.type === 'section' ? String(index) : (step.type === 'start' ? '•' : '★'));
+        num.appendChild(numText);
+        li.appendChild(num);
+        li.appendChild(el('span', 'lbl', step.label));
+        li.addEventListener('click', () => go(index));
+        ul.appendChild(li);
       });
     }
-
-    function switchStep(index) {
-      currentStep = index;
-      updateUI();
-      saveToDraft();
+    function updateSidebar() {
+      document.querySelectorAll('.step').forEach((li, i) => {
+        const step = steps[i];
+        li.classList.toggle('active', i === currentStep);
+        li.classList.toggle('done', step.type === 'section' && sectionDone(step));
+      });
+      const n = answeredCount();
+      document.getElementById('progress-text').textContent = `${n} of ${TOTAL_QUESTIONS} questions answered`;
+      document.getElementById('progress-fill').style.width = `${Math.round((n / TOTAL_QUESTIONS) * 100)}%`;
     }
 
-    function updateUI() {
-      const section = sections[currentStep];
+    // ---------- Navigation ----------
+    function go(index) {
+      currentStep = Math.max(0, Math.min(steps.length - 1, index));
+      render();
+      saveDraft();
+      document.getElementById('main').scrollTo({ top: 0 });
+      window.scrollTo({ top: 0 });
+    }
 
-      // Update sidebar
-      document.querySelectorAll('.step').forEach((el, i) => {
-        el.classList.remove('active');
-        if (i === currentStep) {
-          el.classList.add('active');
-        }
-      });
+    // ---------- Main panel ----------
+    function render() {
+      const step = steps[currentStep];
+      const sectionIndex = steps.filter((s, i) => s.type === 'section' && i < currentStep).length;
+      document.getElementById('eyebrow').textContent =
+        step.type === 'section' ? `Section ${sectionIndex + 1} of ${sections.length}` :
+        step.type === 'start' ? 'Before you begin' : 'All done';
+      document.getElementById('section-title').textContent = step.title;
+      document.getElementById('section-subtitle').textContent = step.subtitle;
 
-      // Update main content
-      document.getElementById('section-title').textContent = section.title;
-      document.getElementById('section-subtitle').textContent = section.subtitle;
+      const content = document.getElementById('section-content');
+      const controls = document.getElementById('controls');
+      content.innerHTML = '';
+      controls.innerHTML = '';
 
-      const contentContainer = document.getElementById('section-content');
-      contentContainer.innerHTML = '';
+      if (step.type === 'start') renderStart(content, controls);
+      else if (step.type === 'section') renderSection(step, content, controls, sectionIndex);
+      else renderFinish(content, controls);
 
-      section.questions.forEach(question => {
-        const group = document.createElement('div');
-        group.className = 'question-group';
-
-        const label = document.createElement('label');
-        label.textContent = `${currentStep + 1}.${section.questions.indexOf(question) + 1}`;
-        group.appendChild(label);
-
-        const questionText = document.createElement('span');
-        questionText.className = 'question-text';
-        questionText.textContent = question.text;
-        group.appendChild(questionText);
-
-        const textarea = document.createElement('textarea');
-        textarea.value = data[section.id][question.key] || '';
-        textarea.addEventListener('input', (e) => {
-          data[section.id][question.key] = e.target.value;
-          updatePreview();
-          saveToDraft();
-        });
-        group.appendChild(textarea);
-
-        if (question.hint) {
-          const hint = document.createElement('div');
-          hint.className = 'hint';
-          hint.textContent = question.hint;
-          group.appendChild(hint);
-        }
-
-        contentContainer.appendChild(group);
-      });
-
+      updateSidebar();
       updatePreview();
     }
 
-    function updatePreview() {
-      const previewContainer = document.getElementById('preview-content');
-      previewContainer.innerHTML = '';
+    function renderStart(content, controls) {
+      const callout = el('div', 'callout');
+      callout.innerHTML =
+        '<strong>What this is.</strong> A Rosetta Stone is the short document that says what is true about your business: what you do, who it\'s for, how you sound, how you work. ' +
+        'Written once. Read by every person and every AI tool on your team. It stops everyone drifting into their own version of reality.' +
+        '<ul><li>Seven sections. Plain answers. Aim for honest, not polished.</li>' +
+        '<li>Nothing is uploaded anywhere. Your answers stay in this browser until you print or copy them.</li>' +
+        '<li>When you\'re done, print it or save it as a PDF. Then paste the text into every AI project your team uses.</li></ul>';
+      content.appendChild(callout);
 
-      sections.forEach(section => {
-        section.questions.forEach(question => {
-          const value = data[section.id][question.key];
-          if (value.trim()) {
-            const previewSection = document.createElement('div');
-            previewSection.className = 'preview-section';
+      const group = el('div', 'question-group');
+      group.appendChild(el('div', 'q-label', 'Your business'));
+      group.appendChild(el('span', 'q-text', 'What is the company called?'));
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = 'e.g. Northwind Consulting';
+      input.value = data.company;
+      input.autocomplete = 'organization';
+      input.addEventListener('input', e => { data.company = e.target.value; saveDraft(); updatePreview(); });
+      group.appendChild(input);
+      group.appendChild(el('div', 'hint', 'This goes on the cover of your printed Rosetta Stone.'));
+      content.appendChild(group);
 
-            const label = document.createElement('div');
-            label.className = 'preview-label';
-            label.textContent = section.label;
-            previewSection.appendChild(label);
-
-            const content = document.createElement('div');
-            content.className = 'preview-content';
-            content.textContent = value;
-            previewSection.appendChild(content);
-
-            previewContainer.appendChild(previewSection);
-          }
-        });
-      });
-
-      if (previewContainer.innerHTML === '') {
-        previewContainer.innerHTML = '<div class="preview-empty">Start filling in sections — your Rosetta Stone will appear here.</div>';
+      const next = el('button', 'btn btn-primary btn-lg', 'Start building →');
+      next.type = 'button';
+      next.addEventListener('click', () => go(currentStep + 1));
+      controls.appendChild(next);
+      if (answeredCount() > 0) {
+        const hint = el('span', 'hint', 'You have answers saved in this browser from before. Pick up where you left off, or ');
+        const clear = el('button', 'btn btn-ghost', 'start over');
+        clear.type = 'button'; clear.addEventListener('click', startOver);
+        hint.appendChild(clear);
+        controls.appendChild(el('span', 'spacer'));
+        controls.appendChild(hint);
       }
     }
 
-    function saveToDraft() {
-      const html = generateHTML();
-      if (window.claude) {
-        const artifact = window.claude.use('artifact');
-        if (artifact) {
-          artifact.then(art => art?.publish(html)).catch(() => {});
+    function renderSection(section, content, controls, sectionIndex) {
+      section.questions.forEach((question, qi) => {
+        const group = el('div', 'question-group');
+        group.appendChild(el('div', 'q-label', `${sectionIndex + 1}.${qi + 1}`));
+        group.appendChild(el('span', 'q-text', question.text));
+        const textarea = document.createElement('textarea');
+        textarea.value = data.answers[question.key] || '';
+        textarea.placeholder = 'Write in plain language. Bullet points are fine.';
+        textarea.addEventListener('input', e => {
+          data.answers[question.key] = e.target.value;
+          updatePreview();
+          updateSidebar();
+          saveDraft();
+        });
+        group.appendChild(textarea);
+        if (question.hint) {
+          const hint = el('div', 'hint');
+          hint.innerHTML = question.hint;
+          group.appendChild(hint);
         }
+        content.appendChild(group);
+        if (qi === 0) setTimeout(() => { if (window.innerWidth > 860) textarea.focus({ preventScroll: true }); }, 50);
+      });
+
+      const back = el('button', 'btn btn-secondary', '← Back');
+      back.type = 'button'; back.addEventListener('click', () => go(currentStep - 1));
+      const isLast = sectionIndex === sections.length - 1;
+      const next = el('button', 'btn btn-primary', isLast ? 'Finish →' : 'Next section →');
+      next.type = 'button'; next.addEventListener('click', () => go(currentStep + 1));
+      controls.appendChild(back);
+      controls.appendChild(el('span', 'spacer'));
+      controls.appendChild(next);
+    }
+
+    function renderFinish(content, controls) {
+      const n = answeredCount();
+      const list = el('ul', 'status-list');
+      sections.forEach((s, i) => {
+        const li = el('li', sectionDone(s) ? 'done' : '');
+        li.appendChild(el('span', 'dot'));
+        li.appendChild(el('span', null, `${i + 1}. ${s.title}`));
+        li.appendChild(el('span', 'state', sectionDone(s) ? 'Complete' : 'Still blank'));
+        li.addEventListener('click', () => go(i + 1));
+        list.appendChild(li);
+      });
+      content.appendChild(list);
+
+      const actions = el('div', 'finish-actions');
+      const print = el('button', 'btn btn-primary btn-lg', '🖨 Print / Save as PDF');
+      print.type = 'button'; print.addEventListener('click', printDoc);
+      const copy = el('button', 'btn btn-secondary btn-lg', '📋 Copy as text');
+      copy.type = 'button'; copy.addEventListener('click', copyAsText);
+      actions.appendChild(print); actions.appendChild(copy);
+      content.appendChild(actions);
+      content.appendChild(el('p', 'print-tip', n < TOTAL_QUESTIONS
+        ? `${TOTAL_QUESTIONS - n} question${TOTAL_QUESTIONS - n === 1 ? '' : 's'} still blank. You can print now and finish later, or click a section above to go back. In the print window, choose "Save as PDF" as the printer.`
+        : 'In the print window, choose "Save as PDF" as the printer to keep a copy. Then paste the text into every AI project your team uses.'));
+
+      const heading = el('h2', null, 'Read-through');
+      heading.style.cssText = 'font-family:var(--display);font-size:22px;margin:0 0 12px;';
+      content.appendChild(heading);
+      content.appendChild(buildDoc());
+
+      const back = el('button', 'btn btn-secondary', '← Back');
+      back.type = 'button'; back.addEventListener('click', () => go(currentStep - 1));
+      const clear = el('button', 'btn btn-ghost', 'Start over');
+      clear.type = 'button'; clear.addEventListener('click', startOver);
+      controls.appendChild(back);
+      controls.appendChild(el('span', 'spacer'));
+      controls.appendChild(clear);
+    }
+
+    // ---------- Live preview (right column) ----------
+    function updatePreview() {
+      const box = document.getElementById('preview-content');
+      box.innerHTML = '';
+      let any = false;
+      if (filled(data.company)) {
+        const ps = el('div', 'preview-section');
+        ps.appendChild(el('div', 'preview-label', 'Company'));
+        ps.appendChild(el('div', 'preview-content', data.company.trim()));
+        box.appendChild(ps); any = true;
+      }
+      sections.forEach(section => {
+        section.questions.forEach(q => {
+          const v = data.answers[q.key];
+          if (!filled(v)) return;
+          const ps = el('div', 'preview-section');
+          ps.appendChild(el('div', 'preview-label', section.label));
+          ps.appendChild(el('div', 'preview-content', v.trim()));
+          box.appendChild(ps); any = true;
+        });
+      });
+      if (!any) box.appendChild(el('div', 'preview-empty', 'Start filling in sections. Your Rosetta Stone will build here as you go.'));
+    }
+
+    // ---------- The document itself (used for the read-through and for print) ----------
+    function buildDoc() {
+      const doc = el('div', 'doc');
+      const cover = el('div', 'doc-cover');
+      cover.appendChild(el('p', 'doc-kicker', 'Business Rosetta Stone'));
+      cover.appendChild(el('h1', null, filled(data.company) ? data.company.trim() : 'Our Rosetta Stone'));
+      if (filled(data.company)) cover.appendChild(el('p', 'doc-company', 'The spine we all work from'));
+      cover.appendChild(el('p', 'doc-meta', `Prepared ${todayLabel()}`));
+      cover.appendChild(el('p', 'doc-intro', 'The shared context this team works from. Every section states what is true about this company. Written once, read by everyone, human or AI, so nobody drifts into their own version of reality.'));
+      doc.appendChild(cover);
+
+      sections.forEach((section, i) => {
+        const sec = el('section', 'doc-section');
+        sec.appendChild(el('h2', null, `${i + 1}. ${section.title}`));
+        sec.appendChild(el('p', 'doc-sub', section.subtitle));
+        section.questions.forEach(q => {
+          const wrap = el('div', 'doc-q');
+          wrap.appendChild(el('p', 'doc-qtext', q.text));
+          const v = data.answers[q.key];
+          wrap.appendChild(filled(v) ? el('p', 'doc-answer', v.trim()) : el('p', 'doc-answer empty', 'Not written yet.'));
+          sec.appendChild(wrap);
+        });
+        doc.appendChild(sec);
+      });
+
+      const footer = el('div', 'doc-footer');
+      footer.appendChild(el('span', null, 'Built with the Rosetta Stone Builder · Limited to Limitless'));
+      footer.appendChild(el('strong', null, 'Be Limitless. Be Bold.'));
+      doc.appendChild(footer);
+      return doc;
+    }
+
+    function refreshPrintDoc() {
+      const holder = document.getElementById('print-doc');
+      holder.innerHTML = '';
+      holder.appendChild(buildDoc());
+    }
+    function printDoc() {
+      refreshPrintDoc();
+      const title = document.title;
+      document.title = (filled(data.company) ? data.company.trim() + ' - ' : '') + 'Rosetta Stone';
+      window.print();
+      setTimeout(() => { document.title = title; }, 1000);
+    }
+    window.addEventListener('beforeprint', refreshPrintDoc);
+
+    // ---------- Copy as plain text (for pasting into AI projects) ----------
+    function buildMarkdown() {
+      let md = `# ${filled(data.company) ? data.company.trim() + ' — ' : ''}Business Rosetta Stone\n\n`;
+      md += `Prepared ${todayLabel()}\n\n`;
+      md += 'The shared context this team works from. Every section states what is true about this company. Written once, read by everyone, human or AI, so nobody drifts into their own version of reality.\n\n';
+      sections.forEach((section, i) => {
+        md += `## ${i + 1}. ${section.title}\n\n`;
+        section.questions.forEach(q => {
+          const v = data.answers[q.key];
+          md += `**${q.text}**\n\n${filled(v) ? v.trim() : '_Not written yet._'}\n\n`;
+        });
+      });
+      md += '---\nBuilt with the Rosetta Stone Builder · Limited to Limitless · Be Limitless. Be Bold.\n';
+      return md;
+    }
+    async function copyAsText() {
+      const text = buildMarkdown();
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast('Copied. Paste it into your AI project or a shared doc.');
+      } catch (e) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); showToast('Copied. Paste it into your AI project or a shared doc.'); }
+        catch (e2) { showToast('Copy failed. Use Print / Save PDF instead.'); }
+        document.body.removeChild(ta);
       }
     }
 
-    function generateHTML() {
-      let content = '<!DOCTYPE html>\n<html>\n<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Your Rosetta Stone</title><style>body{font-family:Inter,-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;margin:0;padding:40px;max-width:800px;line-height:1.8;color:#1f1f1f;background:#fefdfb}h1{font-size:28px;margin-bottom:8px}section{margin-bottom:40px;padding-bottom:40px;border-bottom:1px solid #e5e7eb}section:last-child{border:none}h2{font-size:18px;margin:0 0 16px 0;color:#1f1f1f}@media(prefers-color-scheme:dark){body{background:#0f0f0f;color:#fafafa}h1,h2{color:#fafafa}section{border-bottom-color:#374151}}</style></head><body>\n';
-      content += '<h1>Your Business Rosetta Stone</h1>\n';
-      content += '<p>The shared context your team works from. Every section speaks to what is true about this company, written once, argued about forever.</p>\n';
-
-      sections.forEach(section => {
-        content += `<section>\n<h2>${section.title}</h2>\n`;
-        section.questions.forEach(question => {
-          const value = data[section.id][question.key];
-          if (value.trim()) {
-            content += `<p>${value.replace(/\n/g, '<br>')}</p>\n`;
-          }
-        });
-        content += '</section>\n';
-      });
-
-      content += '</body>\n</html>';
-      return html;
-    }
-
-    async function exportAsMarkdown() {
-      let markdown = '# Your Business Rosetta Stone\n\n';
-      markdown += 'The shared context your team works from. Every section speaks to what is true about this company, written once, argued about forever.\n\n';
-
-      sections.forEach(section => {
-        markdown += `## ${section.title}\n\n`;
-        section.questions.forEach(question => {
-          const value = data[section.id][question.key];
-          if (value.trim()) {
-            markdown += `${value}\n\n`;
-          }
-        });
-      });
-
-      const downloads = await window.claude?.use?.('downloads');
-      if (downloads) {
-        await downloads.save({
-          filename: 'rosetta-stone.md',
-          data: markdown
-        }).catch(() => {
-          // Fallback: copy to clipboard
-          navigator.clipboard.writeText(markdown);
-          alert('Rosetta Stone copied to clipboard (download unavailable)');
-        });
-      }
-    }
-
-    // Initialize
+    // ---------- Boot ----------
+    loadDraft();
     initializeSteps();
-    updateUI();
+    render();
   </script>
 </body>
 </html>
